@@ -177,6 +177,12 @@ sudo apt install -y ristretto gnome-software
 
 > Setelah install `gnome-software`, jalankan: `gnome-software &` dari terminal GUI untuk membuka App Store
 
+## 11. Tambahkan user xrdp ke group ssl-cert
+
+```bash
+
+sudo adduser xrdp ssl-cert
+```
 ---
 
 ## 🔐 Tentang Autentikasi "Default Keyring"

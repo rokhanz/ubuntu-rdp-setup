@@ -96,6 +96,10 @@ sudo apt install -y flameshot xfce4-screenshooter
 echo "[+] Installing Ristretto image viewer and GNOME Software..."
 sudo apt install -y ristretto gnome-software
 
+# === Install user xrdp to group ssl-cert ===
+echo "[+] user xrdp to groups ssl-cert"
+sudo adduser xrdp ssl-cert
+
 # === Finish ===
 echo -e "\n✅ Setup complete! You can now connect via RDP using the username: rdpuser"
 echo "📌 Tip: After first login, if 'Default Keyring' prompts for password, use the same password as your user."

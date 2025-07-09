@@ -1,4 +1,5 @@
 # ubuntu-rdp-setup
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-orange?logo=ubuntu)
 ![RDP](https://img.shields.io/badge/RDP-Enabled-brightgreen)
 ![XFCE](https://img.shields.io/badge/Desktop-XFCE-blue)

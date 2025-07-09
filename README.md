@@ -207,8 +207,7 @@ Jika muncul pop-up "Enter password for default keyring", masukkan **password yan
 
 ## 📚 Referensi
 
-- [DigitalOcean: How To Enable Remote Desktop Protocol Using xrdp on Ubuntu 22.04](https://www.digitalocean.com/community/tutorials/how-to-enable-remote-desktop-protocol-using-xrdp-on-ubuntu-22-04)  
-04)  
+- [DigitalOcean: How To Enable Remote Desktop Protocol Using xrdp on Ubuntu 22.04](https://www.digitalocean.com/community/tutorials/how-to-enable-remote-desktop-protocol-using-xrdp-on-ubuntu-22-04)
 - [GitHub neutrinolabs/xrdp](https://github.com/neutrinolabs/xrdp)
 
 ---

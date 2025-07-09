@@ -34,5 +34,5 @@ Jika muncul pop-up "Enter password for default keyring", masukkan password yang 
  *🙌 Support Me*
 - Saweria: https://saweria.co/rokhanz
 - Binance ID: 114501136OKX
-- UID OKX: 647414010530652202ETH
+- UID OKX: 647414010530652202
 - Address BNB ETH USDT: 0x6c850ac516a7dcffa51e573bcf0736b72621b3e4

@@ -5,6 +5,7 @@
 ![XFCE](https://img.shields.io/badge/Desktop-XFCE-blue)
 
 ***🚀 Ubuntu RDP Setup Guide (XFCE Desktop + Chrome + Conky)***
+
 A complete guide to create a Remote Desktop Environment (RDP) on an Ubuntu VPS (22.04), with GUI (XFCE), Chrome browser, file manager, and lightweight system monitor using Conky.
 
 *📦 Features*
@@ -37,7 +38,7 @@ Jika muncul pop-up "Enter password for default keyring", masukkan password yang 
 - Binance ID: 114501136OKX
 - UID OKX: 647414010530652202
 - Address BNB ETH USDT: 0x6c850ac516a7dcffa51e573bcf0736b72621b3e4
-```markdown
+
 ---
 
 > 💬 *“Teknologi bukan soal alatnya, tapi soal bagaimana kita membuatnya memberdayakan kita.”*  

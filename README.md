@@ -1,7 +1,6 @@
-# 🚀 Ubuntu RDP Setup Guide (XFCE Desktop + Chrome + Conky)
+# # 🚀 Panduan Lengkap Instalasi dan Menjalankan xrdp di Ubuntu/Debian
 
-A complete guide to create a **Remote Desktop Environment (RDP)** on an Ubuntu VPS (22.04), with GUI (XFCE), Chrome browser, file manager, and lightweight system monitor using Conky.
-
+xrdp adalah server Remote Desktop Protocol (RDP) open source yang memungkinkan kamu mengakses desktop Linux dari jarak jauh menggunakan aplikasi Remote Desktop standar seperti Remote Desktop Connection di Windows.
 ---
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
@@ -206,7 +205,18 @@ Jika muncul pop-up "Enter password for default keyring", masukkan **password yan
 **OKX UID**: `647414010530652202`\
 **ETH Wallet**: `0x6c850ac516a7dcffa51e573bcf0736b72621b3e4`
 
----
+## 📚 Referensi
 
-> 💬 *“Teknologi bukan soal alatnya, tapi soal bagaimana kita membuatnya memberdayakan kita.”*  
-> — ROKHANZ
+- [DigitalOcean: How To Enable Remote Desktop Protocol Using xrdp on Ubuntu 22.04](https://www.digitalocean.com/community/tutorials/how-to-enable-remote-desktop-protocol-using-xrdp-on-ubuntu-22-04)  
+04)  
+- [GitHub neutrinolabs/xrdp](https://github.com/neutrinolabs/xrdp)
+
+---
+✨ Penutup
+
+Terima kasih sudah mengikuti panduan ini dengan penuh kesabaran dan semangat belajar! 🙏
+Jika panduan ini membantu, jangan sungkan untuk memberikan ⭐ bintang di repositori ini, karena dukungan kamu sangat berarti untuk kami terus berbagi ilmu dan memperbaiki panduan ini.
+
+Selamat mencoba, semoga sukses dan lancar selalu dalam menjalankan xrdp di VPS kamu! Jangan ragu bertanya jika ada kendala, kami siap membantu.
+
+Salam hangat dan semangat coding! 💻🌟

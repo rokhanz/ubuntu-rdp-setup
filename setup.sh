@@ -2,6 +2,8 @@
 
 # Ubuntu RDP Setup Script (XFCE + Chrome + Conky + Wallpaper + AutoLock + Splash + Secure User Input + Uninstall)
 # Author: ROKHANZ - https://github.com/rokhanz
+# License: MIT
+# Version: 1.0.0
 
 set -e
 trap 'echo -e "\n🚨 Terjadi error! Setup dihentikan."; exit 1' ERR
@@ -17,14 +19,14 @@ echo -e "\e[97m$$ |  $$ | $$$$$$  |$$ | \$$\ $$ |  $$ |$$ |  $$ |$$ | \$$ |$$$$$
 echo -e "\e[0m\__|  \__| \______/ \__|  \__|\__|  \__|\__|  \__|\__|  \__|\________|"
 
 # === [ Mode UNINSTALL ] ===
-
 if [[ "$1" == "--remove" ]]; then
     echo "🗑️ Menghapus XRDP GUI setup..."
     read -p "Masukkan username yang ingin dihapus: " XRDP_USER
 
     if id "$XRDP_USER" >/dev/null 2>&1; then
-        echo "🔍 Mematikan proses user..."
-        sudo pkill -u "$XRDP_USER" || true
+        echo "🔍 Memastikan tidak ada proses user aktif..."
+        sudo pkill -9 -u "$XRDP_USER" || true
+        sleep 2
         echo "🔍 Menghapus user dan home directory..."
         sudo deluser --remove-home "$XRDP_USER"
         echo "✅ User $XRDP_USER berhasil dihapus."
@@ -33,13 +35,16 @@ if [[ "$1" == "--remove" ]]; then
     fi
 
     echo "🧹 Membersihkan paket..."
-    sudo apt purge -y xfce4 xfce4-goodies xrdp conky-all xscreensaver google-chrome-stable zenity ristretto flameshot xfce4-screenshooter gnome-software || true
+    sudo apt purge -y xfce4 xfce4-goodies xrdp conky-all xscreensaver google-chrome-stable zenity ristretto flameshot xfce4-screenshooter gnome-software fonts-noto-color-emoji || true
     sudo apt autoremove -y
+
+    echo "🗑️ Membersihkan file sisa instalasi..."
+    sudo rm -rf /usr/share/fonts/truetype/noto
+    sudo rm -f /home/*/Pictures/wallpaper.png
 
     echo "✅ Semua komponen berhasil dihapus."
     exit 0
 fi
-
 
 # === 1. Update System ===
 echo "🔄 Updating system packages..."
@@ -49,7 +54,37 @@ sudo apt update && sudo apt upgrade -y
 echo "🖥️ Installing XFCE and xRDP..."
 sudo apt install -y xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils xrdp zenity
 
-# === 3. Create User (Interactive) ===
+# === 3. Install supporting font Emoji ===
+echo "🔤 Installing Noto Color Emoji font..."
+sudo apt install -y fonts-noto-color-emoji
+sudo fc-cache -f -v
+
+# === 4. Pilihan Zona Waktu ===
+echo "🕒 Pilih zona waktu untuk XRDP:"
+echo "1. UTC"
+echo "2. WIB (Default)"
+read -p "Masukkan pilihan [1-2]: " timezone_choice
+case "$timezone_choice" in
+  1) timezone="UTC" ;;
+  *) timezone="Asia/Jakarta" ;;
+esac
+sudo timedatectl set-timezone "$timezone"
+echo "✅ Zona waktu diatur ke: $(timedatectl | grep 'Time zone')"
+
+# === 5. Firewall XRDP Port 3389 ===
+echo "🔥 Membuka port 3389 untuk XRDP..."
+if command -v ufw >/dev/null; then
+  sudo ufw allow 3389/tcp
+  sudo ufw reload
+elif command -v firewall-cmd >/dev/null; then
+  sudo firewall-cmd --add-port=3389/tcp --permanent
+  sudo firewall-cmd --reload
+else
+  echo "⚠️ Firewall tidak terdeteksi, pastikan port 3389 terbuka secara manual."
+fi
+echo "✅ Firewall selesai dikonfigurasi."
+
+# === 6. Create User (Interactive) ===
 echo "👤 Tambahkan user untuk login di XRDP:"
 read -p "   ➤ Username: " XRDP_USER
 
@@ -83,7 +118,7 @@ sudo adduser --disabled-password --gecos "" "$XRDP_USER"
 echo "$XRDP_USER:$XRDP_PASS" | sudo chpasswd
 sudo usermod -aG sudo "$XRDP_USER"
 
-# === 4. Set Splash + XFCE Session ===
+# === 7. Set Splash + XFCE Session ===
 echo "🚀 Setting splash screen and XFCE session..."
 cat <<EOF | sudo tee /home/$XRDP_USER/.xsession > /dev/null
 #!/bin/bash
@@ -115,7 +150,7 @@ EOF
 sudo chmod +x /home/$XRDP_USER/.xsession
 sudo chown $XRDP_USER:$XRDP_USER /home/$XRDP_USER/.xsession
 
-# === 5. Enable Auto Login ===
+# === 8. Enable Auto Login ===
 echo "🔓 Enabling auto login for $XRDP_USER..."
 sudo mkdir -p /etc/lightdm/lightdm.conf.d
 cat <<EOF | sudo tee /etc/lightdm/lightdm.conf.d/50-autologin.conf
@@ -126,12 +161,13 @@ user-session=xfce
 greeter-session=lightdm-gtk-greeter
 EOF
 
-# === 6. Install Google Chrome ===
+# === 9. Install Google Chrome ===
 echo "🌐 Installing Google Chrome..."
 wget -O /tmp/chrome.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
 sudo apt install -y /tmp/chrome.deb
+rm -f /tmp/chrome.deb
 
-# === 7. Add Desktop Shortcuts ===
+# === 10. Add Desktop Shortcuts ===
 echo "📁 Adding shortcuts to Desktop..."
 sudo -u $XRDP_USER mkdir -p /home/$XRDP_USER/Desktop
 sudo cp /usr/share/applications/google-chrome.desktop /home/$XRDP_USER/Desktop/
@@ -140,11 +176,11 @@ sudo cp /usr/share/applications/parole.desktop /home/$XRDP_USER/Desktop/ || echo
 sudo chmod +x /home/$XRDP_USER/Desktop/*.desktop
 sudo chown -R $XRDP_USER:$XRDP_USER /home/$XRDP_USER/Desktop
 
-# === 8. Install Conky ===
+# === 11. Install Conky ===
 echo "📊 Installing Conky..."
 sudo apt install -y conky-all
 
-# === 9. Create Conky Config ===
+# === 12. Create Conky Config ===
 echo "⚙️ Creating Conky config..."
 cat <<EOF | sudo tee /home/$XRDP_USER/.conkyrc > /dev/null
 conky.config = {
@@ -162,23 +198,23 @@ gap_x = 20,
 gap_y = 50,
 minimum_width = 200,
 default_color = 'white',
-font = 'sans 10'
+font = 'Noto Color Emoji:size=10'
 };
 
 conky.text = [[
 ROKHANZ XRDP STATUS
 
-RAM     : $mem / $memmax
-CPU     : ${cpu cpu0}% @ ${freq_g} MHz
-DISK    : ${fs_used /} / ${fs_size /}
-UPTIME  : $uptime
-OS      : ${exec lsb_release -d | cut -f2}
+RAM     : \$mem / \$memmax
+CPU     : \${cpu cpu0}% @ \${freq_g} MHz
+DISK    : \${fs_used /} / \${fs_size /}
+UPTIME  : \$uptime
+OS      : \${exec lsb_release -d | cut -f2}
 ]];
 EOF
 
 sudo chown $XRDP_USER:$XRDP_USER /home/$XRDP_USER/.conkyrc
 
-# === 10. Autostart Conky (delay 5s) ===
+# === 13. Autostart Conky (delay 5s) ===
 echo "⚡ Setting Conky autostart (delay 5s)..."
 sudo -u $XRDP_USER mkdir -p /home/$XRDP_USER/.config/autostart
 cat <<EOF | sudo tee /home/$XRDP_USER/.config/autostart/conky.desktop > /dev/null
@@ -192,14 +228,14 @@ Name=Conky System Monitor
 Comment=Start conky after 5s
 EOF
 
-# === 11. Set Wallpaper from GitHub ===
+# === 14. Set Wallpaper from GitHub ===
 echo "🖼️ Setting wallpaper from GitHub..."
 sudo -u $XRDP_USER mkdir -p /home/$XRDP_USER/Pictures
 sudo -u $XRDP_USER wget -qO /home/$XRDP_USER/Pictures/wallpaper.png "https://raw.githubusercontent.com/rokhanz/myimg/main/assets/image/chips_rokhanz.png"
 sudo -u $XRDP_USER xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/image-path -s /home/$XRDP_USER/Pictures/wallpaper.png
 sudo -u $XRDP_USER xfconf-query -c xfce4-desktop -p /backdrop/screen0/monitor0/image-style -s 3
 
-# === 12. Auto-Lock After 1 Hour ===
+# === 15. Auto-Lock After 1 Hour ===
 echo "🔐 Setting auto-lock after 1 hour idle..."
 sudo apt install -y xscreensaver
 cat <<EOF | sudo tee /home/$XRDP_USER/.xscreensaver > /dev/null
@@ -227,20 +263,20 @@ Comment=Auto-lock after 1 hour idle
 EOF
 sudo chown -R $XRDP_USER:$XRDP_USER /home/$XRDP_USER/.xscreensaver /home/$XRDP_USER/.config/autostart
 
-# === 13. Prevent Screen Blank (System Level) ===
+# === 16. Prevent Screen Blank (System Level) ===
 echo "💡 Disabling DPMS and screen blanking..."
 echo "xset s off && xset -dpms && xset s noblank" | sudo tee -a /home/$XRDP_USER/.xprofile
 sudo chown $XRDP_USER:$XRDP_USER /home/$XRDP_USER/.xprofile
 
-# === 14. Install Screenshot & GUI Tools ===
+# === 17. Install Screenshot & GUI Tools ===
 echo "🖼️ Installing screenshot and GUI tools..."
 sudo apt install -y flameshot xfce4-screenshooter ristretto gnome-software
 
-# === 15. Add xrdp to ssl-cert Group ===
+# === 18. Add xrdp to ssl-cert Group ===
 echo "🔒 Adding user xrdp to ssl-cert group..."
 sudo adduser xrdp ssl-cert
 
-# === 16. Final ===
+# === 19. Final ===
 echo -e "\n✅ Setup complete! Silakan reboot VPS sebelum login pertama via RDP:"
 echo "   👉 Username: $XRDP_USER"
 echo "   🔁 Perintah reboot: sudo reboot"

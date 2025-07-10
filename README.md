@@ -1,189 +1,96 @@
-# # 🚀 Panduan Lengkap Instalasi dan Menjalankan xrdp di Ubuntu/Debian
+---
+# Ubuntu RDP Setup - XFCE + Chrome + Conky + Wallpaper
 
-xrdp adalah server Remote Desktop Protocol (RDP) open source yang memungkinkan kamu mengakses desktop Linux dari jarak jauh menggunakan aplikasi Remote Desktop standar seperti Remote Desktop Connection di Windows.
 ---
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04-orange?logo=ubuntu)
 ![RDP](https://img.shields.io/badge/RDP-Enabled-brightgreen)
 ![XFCE](https://img.shields.io/badge/Desktop-XFCE-blue)
+![Badge](https://img.shields.io/badge/RDP-AutoInstall-blue)
+![Badge](https://img.shields.io/badge/Maintainer-rokhanz-green)
+![Badge](https://img.shields.io/badge/Desktop-XFCE-lightgrey)
+
+> 📦 **Versi Terbaru:** `v1.4`
+> 🕓 **Tanggal Rilis:** `10 Juli 2025`
 
 ---
 
-## 📦 Features
+## 🎯 Tujuan
 
-- XFCE Desktop environment
-- Remote access via RDP (xRDP)
-- Google Chrome installed
-- Conky system monitor (auto-start)
-- File Manager & Terminal GUI
-- Parole video player
-- Screenshot tools
-- RDP works like a real desktop system
+Script ini akan mengubah VPS Ubuntu 22.04 kamu menjadi **desktop GUI via xRDP**, lengkap dengan fitur:
 
----
-
-## 🧰 Requirements
-
-- VPS (DigitalOcean, Vultr, etc.) with Ubuntu 22.04
-- 2 vCPU+, 2 GB RAM minimum recommended
-- RDP client (Remote Desktop Connection on Windows)
+* ✅ Auto-login ke XRDP
+* 🎨 Wallpaper branding dari GitHub
+* 🖥️ XFCE Desktop Environment
+* 🌐 Google Chrome (full GUI browser)
+* 📊 Conky System Monitor (menampilkan status RAM, CPU, disk)
+* 🔐 Auto-lock session setelah idle 1 jam
+* 🪧 Splash screen sebelum masuk desktop
 
 ---
 
-## 🧱 Installation Steps
+## 🧪 Tested On
 
-### 🔄 Quick Setup via Git Clone
+* ✅ Ubuntu 22.04 (DigitalOcean / Oracle / local VPS)
+* ✅ XFCE + xRDP
 
-If you're familiar with Git, you can clone and run setup script directly:
+---
+
+## 🛠️ Cara Install (Langkah Praktis)
+
+### 1. Clone Repository
 
 ```bash
 git clone https://github.com/rokhanz/ubuntu-rdp-setup.git
 cd ubuntu-rdp-setup
+```
+
+### 2. Jalankan Script Instalasi
+
+```bash
 chmod +x setup.sh
-chmod +x setup-conky.sh
 ./setup.sh
-sleep 2
-./setup-conky.sh
 ```
+
+> ⚠️ Kamu akan diminta memasukkan username dan password. Username tidak boleh `root` dan password minimal 6 karakter.
 
 ---
 
-### 1. Update and Install XFCE + xRDP
+## 📸 Tampilan Desktop
 
-```bash
-sudo apt update && sudo apt upgrade -y
-sudo apt install -y xfce4 xfce4-goodies xorg dbus-x11 x11-xserver-utils xrdp
-```
-
-### 2. Add RDP User and Set Password
-
-```bash
-sudo adduser rdpuser
-sudo usermod -aG sudo rdpuser
-```
-
-> Replace `rdpuser` with your desired username.
-
-### 3. Set XFCE Session for xRDP
-
-```bash
-echo "xfce4-session" > ~/.xsession
-sudo systemctl restart xrdp
-```
-
-### 4. Install Chrome Browser
-
-```bash
-wget -O ~/chrome.deb "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-sudo apt install -y ./chrome.deb
-```
-
-### 5. Add Desktop Shortcuts (Chrome, Terminal, Parole)
-
-```bash
-cp /usr/share/applications/google-chrome.desktop ~/Desktop/
-cp /usr/share/applications/xfce4-terminal.desktop ~/Desktop/
-cp /usr/share/applications/parole.desktop ~/Desktop/
-chmod +x ~/Desktop/*.desktop
-```
+---
+![contoh gambar](https://github.com/rokhanz/ubuntu-rdp-setup/blob/main/img/contoh%20walpaper%20rokhanz.png)
+---
 
 ---
 
-## 📊 Install Conky (System Info)
+## 📂 Struktur Paket yang Terinstall
 
-### 6. Install Conky
-
-```bash
-sudo apt install conky-all -y
-```
-
-### 7. Create Config File
-
-```bash
-nano ~/.conkyrc
-```
-
-Paste:
-
-```lua
-conky.config = {
-    alignment = 'top_right',
-    background = true,
-    update_interval = 2.0,
-    double_buffer = true,
-    no_buffers = true,
-    own_window = true,
-    own_window_type = 'normal',
-    own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
-    own_window_argb_value = 0,
-    gap_x = 20,
-    gap_y = 50,
-    minimum_width = 200,
-    default_color = 'white',
-    font = 'sans 10'
-};
-
-conky.text = [[
-ROKHANZ VPS STATUS
-
-RAM     : $mem / $memmax
-CPU     : ${cpu cpu0}% @ ${freq_g} MHz
-DISK    : ${fs_used /} / ${fs_size /}
-UPTIME  : $uptime
-OS      : ${exec lsb_release -d | cut -f2}
-]];
-```
-
-### 8. Autostart Conky on Login
-
-```bash
-mkdir -p ~/.config/autostart
-nano ~/.config/autostart/conky.desktop
-```
-
-Paste:
-
-```ini
-[Desktop Entry]
-Type=Application
-Exec=sh -c "sleep 5 && conky"
-Hidden=false
-NoDisplay=false
-X-GNOME-Autostart-enabled=true
-Name=Conky
-```
+* `xfce4`, `xrdp`, `x11-xserver-utils` — GUI & RDP
+* `conky-all` — sistem monitor
+* `zenity` — splash screen GUI
+* `google-chrome-stable` — browser
+* `flameshot`, `xfce4-screenshooter`, `ristretto`, `gnome-software` — utilitas GUI
 
 ---
 
-## 📸 Install Screenshot Tools
+## 💬 Catatan Tambahan
 
-### 9. Install Flameshot and XFCE Screenshooter
-
-```bash
-sudo apt install -y flameshot xfce4-screenshooter
-```
-
-Shortcut-nya bisa ditambahkan ke Desktop seperti langkah sebelumnya.
+* File wallpaper diambil dari: `https://github.com/rokhanz/myimg`
+* Conky autostart ditunda 5 detik agar tidak tertutup wallpaper
+* Splash screen menampilkan ucapan: `SELAMAT DATANG DI XRDP`
+* Jika ingin kustomisasi lebih lanjut, edit bagian `.xsession`, `.conkyrc`, dan `.config/autostart/`
 
 ---
 
-## 🖼️ Install Optional GUI Tools
+## 📞 Kontak & Laporan Masalah
 
-### 10. Install Image Viewer & Gnome Software Center
+Jika kamu menemukan error atau ingin menambahkan fitur:
 
-```bash
-sudo apt install -y ristretto gnome-software
-```
+* Kunjungi: [github.com/rokhanz](https://github.com/rokhanz)
+* Atau buka [Issues](https://github.com/rokhanz/ubuntu-rdp-setup/issues)
 
-> Setelah install `gnome-software`, jalankan: `gnome-software &` dari terminal GUI untuk membuka App Store
-
-## 11. Tambahkan user xrdp ke group ssl-cert
-
-```bash
-
-sudo adduser xrdp ssl-cert
-```
 ---
 
 ## 🔐 Tentang Autentikasi "Default Keyring"
@@ -198,9 +105,6 @@ Jika muncul pop-up "Enter password for default keyring", masukkan **password yan
 2. Connect via RDP using your VPS IP, username: `rdpuser`, password: yourpassword
 3. Anda akan melihat desktop lengkap dengan Chrome, terminal, video player, screenshot tools, dan Conky system info
 
----
-![contoh gambar](https://github.com/rokhanz/ubuntu-rdp-setup/blob/main/img/contoh%20walpaper%20rokhanz.png)
----
 ## 🙌 Support Me
 
 **Saweria**: [https://saweria.co/rokhanz](https://saweria.co/rokhanz)\
@@ -211,9 +115,12 @@ Jika muncul pop-up "Enter password for default keyring", masukkan **password yan
 ## 📚 Referensi
 
 - [DigitalOcean: How To Enable Remote Desktop Protocol Using xrdp on Ubuntu 22.04](https://www.digitalocean.com/community/tutorials/how-to-enable-remote-desktop-protocol-using-xrdp-on-ubuntu-22-04)
-- [GitHub neutrinolabs/xrdp](https://github.com/neutrinolabs/xrdp)
-
 ---
+## 📌 Lisensi
+
+Script ini open source. Gunakan dengan bijak dan jangan disalahgunakan.
+---
+
 ✨ Penutup
 
 Terima kasih sudah mengikuti panduan ini dengan penuh kesabaran dan semangat belajar! 🙏

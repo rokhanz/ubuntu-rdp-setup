@@ -144,12 +144,11 @@ Paste:
 ```ini
 [Desktop Entry]
 Type=Application
-Exec=conky
+Exec=sh -c "sleep 5 && conky"
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-Name=Conky System Monitor
-Comment=Start conky on login
+Name=Conky
 ```
 
 ---

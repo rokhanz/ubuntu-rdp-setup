@@ -1,4 +1,4 @@
-\#!/bin/bash
+#!/bin/bash
 
 # Ubuntu RDP Setup Script (XFCE + Chrome + Conky + Wallpaper + AutoLock + Splash + Secure User Input + Uninstall)
 
@@ -9,7 +9,7 @@ trap 'echo "\n🚨 Terjadi error! Setup dihentikan."; exit 1' ERR
 
 # === \[ Mode UNINSTALL ] ===
 
-if \[\[ "\$1" == "--remove" ]]; then
+if [[ "\$1" == "--remove" ]]; then
 echo "🗑️ Menghapus XRDP GUI setup..."
 read -p "Masukkan username yang ingin dihapus: " XRDP\_USER
 sudo systemctl stop xrdp || true

@@ -47,11 +47,6 @@ Script ini akan mengubah VPS Ubuntu 22.04 kamu menjadi **desktop GUI via xRDP**,
 ```bash
 git clone https://github.com/rokhanz/ubuntu-rdp-setup.git
 cd ubuntu-rdp-setup
-```
-
-### 2. Jalankan Script
-
-```bash
 chmod +x setup.sh
 ./setup.sh
 ```

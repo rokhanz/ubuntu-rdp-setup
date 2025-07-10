@@ -41,7 +41,10 @@ If you're familiar with Git, you can clone and run setup script directly:
 git clone https://github.com/rokhanz/ubuntu-rdp-setup.git
 cd ubuntu-rdp-setup
 chmod +x setup.sh
+chmod +x setup-conky.sh
 ./setup.sh
+sleep 2
+./setup-conky.sh
 ```
 
 ---

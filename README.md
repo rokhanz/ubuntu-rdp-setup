@@ -197,7 +197,8 @@ Jika muncul pop-up "Enter password for default keyring", masukkan **password yan
 3. Anda akan melihat desktop lengkap dengan Chrome, terminal, video player, screenshot tools, dan Conky system info
 
 ---
-
+![contoh gambar](https://github.com/rokhanz/ubuntu-rdp-setup/blob/main/img/contoh%20walpaper%20rokhanz.png)
+---
 ## 🙌 Support Me
 
 **Saweria**: [https://saweria.co/rokhanz](https://saweria.co/rokhanz)\

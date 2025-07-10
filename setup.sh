@@ -11,13 +11,25 @@ trap 'echo -e "\n🚨 Terjadi error! Setup dihentikan."; exit 1' ERR
 if [[ "$1" == "--remove" ]]; then
     echo "🗑️ Menghapus XRDP GUI setup..."
     read -p "Masukkan username yang ingin dihapus: " XRDP_USER
-    sudo systemctl stop xrdp || true
-    sudo deluser --remove-home "$XRDP_USER" || true
+
+    if id "$XRDP_USER" >/dev/null 2>&1; then
+        echo "🔍 Mematikan proses user..."
+        sudo pkill -u "$XRDP_USER" || true
+        echo "🔍 Menghapus user dan home directory..."
+        sudo deluser --remove-home "$XRDP_USER"
+        echo "✅ User $XRDP_USER berhasil dihapus."
+    else
+        echo "⚠️ User $XRDP_USER tidak ditemukan."
+    fi
+
+    echo "🧹 Membersihkan paket..."
     sudo apt purge -y xfce4 xfce4-goodies xrdp conky-all xscreensaver google-chrome-stable zenity ristretto flameshot xfce4-screenshooter gnome-software || true
     sudo apt autoremove -y
+
     echo "✅ Semua komponen berhasil dihapus."
     exit 0
 fi
+
 
 # === 1. Update System ===
 echo "🔄 Updating system packages..."
